@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/dictionary"
+        android:title="Словарь"
+        android:icon="@drawable/ic_baseline_menu_book_24"/>
+    <item
+        android:id="@+id/teach"
+        android:title="Обучение"
+        android:icon="@drawable/ic_baseline_school_24"/>
+    <item
+        android:id="@+id/profile"
+        android:title="Профиль"
+        android:icon="@drawable/ic_baseline_person_24"/>
+</menu>
