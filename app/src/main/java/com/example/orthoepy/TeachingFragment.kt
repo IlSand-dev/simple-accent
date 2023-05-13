@@ -7,11 +7,9 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
-import android.widget.Toast
 
 
 private const val ARG_PARAM1 = "param1"
@@ -139,8 +137,7 @@ class TeachingFragment : Fragment() {
             }
 
         }
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-            answerVarinats)
-        listView!!.adapter = arrayAdapter
+        val adapter = CustomListAdapter(requireContext(), answerVarinats)
+        listView!!.adapter = adapter
     }
 }

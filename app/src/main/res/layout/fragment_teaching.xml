@@ -9,7 +9,9 @@
     <ListView
         android:id="@+id/answers_list"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="450dp"
+        android:dividerHeight="10dp"
+        android:divider="@android:color/transparent"
         app:layout_constraintBottom_toTopOf="@+id/win_text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,10 +30,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/button_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:cornerRadius="13dp"
+        android:backgroundTint="@color/item_checked"
+        android:textColor="@color/black"
         android:text="Новый тест"
         android:layout_marginBottom="5dp"
         app:layout_constraintBottom_toBottomOf="parent"

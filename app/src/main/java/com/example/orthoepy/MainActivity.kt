@@ -4,8 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.fragment.app.Fragment
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,4 +31,23 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun readFile(){
+        val words = Words()
+        var oneWord:String?
+        val inputStream: InputStream = this.resources.openRawResource(R.raw.dict)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        var eachLine : String? = reader.readLine()
+        try{
+            while(eachLine != null){
+                oneWord = eachLine.trimEnd()
+                eachLine = reader.readLine()
+                words.addWord(oneWord)
+            }
+            println(words.getWords())
+        }catch (_:Exception){
+
+        }
+    }
+
 }

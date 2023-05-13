@@ -1,6 +1,8 @@
 package com.example.orthoepy
 
+
 class Words {
+    var newWords = mutableListOf<String>()
     private var words = mutableListOf(
         "бралА",
         "вернА",
@@ -31,11 +33,15 @@ class Words {
         "я"
     )
 
-    public fun getWords():List<String>{
-        return words
+    public fun getWords():MutableList<String>{
+        return newWords
     }
     public fun getVowels():List<String>{
-        return vowels;
+        return vowels
+    }
+
+    public fun addWord(word:String){
+        newWords.add(word)
     }
 
 }

@@ -7,6 +7,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.ListView
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
 
 private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
@@ -38,6 +41,7 @@ class DictionaryFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         listView = view.findViewById(R.id.list_view)
         val wordsList = words.getWords()
+        println(wordsList)
         val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
             wordsList)
         listView!!.adapter = arrayAdapter
