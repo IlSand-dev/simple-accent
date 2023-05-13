@@ -2,4 +2,8 @@
     <string name="app_name">Orthoepy</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="greeting">Орфоэпия. Сдай ЕГЭ!</string>
+    <string name="greeting_r">Мааааленькая регистрация</string>
+    <string name="hint">Введите имя</string>
+    <string name="cont">Продолжить</string>
 </resources>

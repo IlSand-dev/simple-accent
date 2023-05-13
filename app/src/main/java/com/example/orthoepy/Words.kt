@@ -35,7 +35,7 @@ class Words {
         return words
     }
     public fun getVowels():List<String>{
-        return vowels
+        return vowels;
     }
 
 }

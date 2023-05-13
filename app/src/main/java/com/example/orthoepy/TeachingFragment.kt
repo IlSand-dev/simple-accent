@@ -1,5 +1,7 @@
 package com.example.orthoepy
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -89,6 +91,7 @@ class TeachingFragment : Fragment() {
         return listOfVariants
     }
 
+    @SuppressLint("SetTextI18n")
     private fun createList() {
         button!!.text = "Далее"
         winText!!.text = ""
@@ -101,20 +104,24 @@ class TeachingFragment : Fragment() {
         listView!!.setOnItemClickListener { parent, view, position, id ->
             if(isPossibleToClick && !isTestOver){
                 val element:String= parent.getItemAtPosition(position) as String
+
                 if(element.equals(rightWord) && isPossibleToClick){
+                    parent.getChildAt(position).setBackgroundColor(Color.GREEN)
                     taskCount++
-                    if(taskCount < 10){
+                    if(taskCount < 5){
                         winText!!.text = "Верно!"
                         isPossibleToClick = false
                     }
                     else{
-                        winText!!.text = "Тест окончен. Вы совершили " + mistakeCounter.toString() + " ошибок"
+                        winText!!.text =  "Количество ошибок: " + mistakeCounter.toString()
                         taskCount = 0
                         isTestOver = true
+                        mistakeCounter = 0
                         button!!.text = "Новый тест"
                     }
                 }
                 else{
+                    parent.getChildAt(position).setBackgroundColor(Color.RED)
                     mistakeCounter++
                     taskCount++
                     if(taskCount < 5){
@@ -122,9 +129,10 @@ class TeachingFragment : Fragment() {
                         isPossibleToClick = false
                     }
                     else{
-                        winText!!.text = "Тест окончен. Вы совершили " + mistakeCounter.toString() + " ошибок"
+                        winText!!.text = "Количество ошибок: " + mistakeCounter.toString()
                         taskCount = 0
                         isTestOver = true
+                        mistakeCounter = 0
                         button!!.text = "Новый тест"
                     }
                 }
