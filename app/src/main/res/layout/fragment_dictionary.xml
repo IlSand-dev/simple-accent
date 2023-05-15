@@ -6,7 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".DictionaryFragment">
 
-
     <FrameLayout
         android:id="@+id/frame_1"
         android:layout_width="match_parent"
@@ -33,6 +32,11 @@
             android:text="@string/teach_materials"/>
     </FrameLayout>
 
+    <Spinner
+        android:id="@+id/spinner_1"
+        android:layout_width="match_parent"
+        app:layout_constraintTop_toBottomOf="@+id/frame_1"
+        android:layout_height="50dp"/>
 
     <ListView
         android:id="@+id/list_view"
@@ -43,6 +47,6 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/frame_1" />
+        app:layout_constraintTop_toBottomOf="@+id/spinner_1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

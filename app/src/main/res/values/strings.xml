@@ -9,6 +9,7 @@
     <string name="teach_materials">Обучающие материалы</string>
     <string name="new_test">Пройти тестирование</string>
     <string-array name="words_types">
+        <item>Все слова</item>
         <item>Существительные</item>
         <item>Глаголы</item>
         <item>Прилагательные</item>

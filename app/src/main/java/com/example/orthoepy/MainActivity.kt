@@ -4,9 +4,6 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import java.io.BufferedReader
-import java.io.InputStream
-import java.io.InputStreamReader
 
 
 class MainActivity : AppCompatActivity() {

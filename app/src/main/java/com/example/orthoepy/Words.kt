@@ -1,7 +1,6 @@
 package com.example.orthoepy
 
 import android.content.Context
-import androidx.core.content.ContentProviderCompat.requireContext
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
@@ -9,23 +8,6 @@ import java.io.InputStreamReader
 
 class Words {
     var newWords = mutableListOf<String>()
-    private var words = mutableListOf(
-        "бралА",
-        "вернА",
-        "вероисповЕдание",
-        "взялА",
-        "взялАсь",
-        "включЁн",
-        "включЁнный",
-        "влилАсь",
-        "добелА",
-        "добралА",
-        "добралАсь",
-        "довезЁнный",
-        "дОверху",
-        "договорЁнность",
-        "дождалАсь"
-    )
     private val vowels = listOf(
         "а",
         "о",
@@ -39,7 +21,7 @@ class Words {
         "я"
     )
 
-    public fun getVowels():List<String>{
+    fun getVowels():List<String>{
         return vowels
     }
 
@@ -58,6 +40,31 @@ class Words {
 
         }
         return newWords
+    }
+
+    fun getRule(ruleType:Int, context: Context):String{
+        var s:String = ""
+        var inputStream: InputStream? = null
+        when(ruleType){
+            1 -> inputStream = context.resources.openRawResource(R.raw.noun_rule)
+            2 -> inputStream = context.resources.openRawResource(R.raw.verbs_rule)
+            3 -> inputStream = context.resources.openRawResource(R.raw.adjective_rule)
+            4 -> inputStream = context.resources.openRawResource(R.raw.participles_rule)
+            5 -> inputStream = context.resources.openRawResource(R.raw.adverbs_rule)
+            6 -> inputStream = context.resources.openRawResource(R.raw.adverbbbs_rule)
+        }
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        var eachLine : String? = reader.readLine()
+        try{
+            while(eachLine != null){
+                s += eachLine.trimEnd()
+                eachLine = reader.readLine()
+                s += "\n"
+            }
+        }catch (_:Exception){
+
+        }
+        return s
     }
 
 }

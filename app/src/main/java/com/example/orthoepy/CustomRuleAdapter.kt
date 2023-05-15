@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.TextView
 
-class CustomListAdapter(context:Context, items:List<String>): BaseAdapter() {
+class CustomRuleAdapter(context: Context, items:List<String>): BaseAdapter()  {
     private var items:List<String>
     private var context:Context
     init {
@@ -27,8 +27,8 @@ class CustomListAdapter(context:Context, items:List<String>): BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val oneItem = LayoutInflater.from(context).inflate(R.layout.var_item, parent, false)
-        val text:TextView = oneItem.findViewById(R.id.var_text)
+        val oneItem = LayoutInflater.from(context).inflate(R.layout.one_rule_item, parent, false)
+        val text: TextView = oneItem.findViewById(R.id.rule_text)
         text.text = items[position]
         return oneItem
     }
