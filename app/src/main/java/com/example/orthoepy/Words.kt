@@ -1,5 +1,11 @@
 package com.example.orthoepy
 
+import android.content.Context
+import androidx.core.content.ContentProviderCompat.requireContext
+import java.io.BufferedReader
+import java.io.InputStream
+import java.io.InputStreamReader
+
 
 class Words {
     var newWords = mutableListOf<String>()
@@ -33,15 +39,25 @@ class Words {
         "я"
     )
 
-    public fun getWords():MutableList<String>{
-        return newWords
-    }
     public fun getVowels():List<String>{
         return vowels
     }
 
-    public fun addWord(word:String){
-        newWords.add(word)
+    fun getWords(context: Context):MutableList<String>{
+        var oneWord:String?
+        val inputStream: InputStream = context.resources.openRawResource(R.raw.dict)
+        val reader = BufferedReader(InputStreamReader(inputStream))
+        var eachLine : String? = reader.readLine()
+        try{
+            while(eachLine != null){
+                oneWord = eachLine.trimEnd()
+                eachLine = reader.readLine()
+                newWords.add(oneWord)
+            }
+        }catch (_:Exception){
+
+        }
+        return newWords
     }
 
 }

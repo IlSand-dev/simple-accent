@@ -95,7 +95,7 @@ class TeachingFragment : Fragment() {
         winText!!.text = ""
         var isPossibleToClick = true
         var isTestOver = false
-        val wordsList = words.getWords()
+        val wordsList = words.getWords(requireContext())
         val vowels = words.getVowels()
         val rightWord = wordsList[(0..wordsList.size-1).random()]
         val answerVarinats = makeTask(rightWord, vowels)

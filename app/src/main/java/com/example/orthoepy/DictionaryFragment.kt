@@ -40,11 +40,10 @@ class DictionaryFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         listView = view.findViewById(R.id.list_view)
-        val wordsList = words.getWords()
+        val wordsList = words.getWords(requireContext())
         println(wordsList)
-        val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1,
-            wordsList)
-        listView!!.adapter = arrayAdapter
+        val adapter = CustomListAdapter(requireContext(), wordsList)
+        listView!!.adapter = adapter
     }
 
     companion object {
