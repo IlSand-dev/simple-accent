@@ -1,6 +1,8 @@
 package com.example.orthoepy
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,6 +12,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
+import com.github.mikephil.charting.charts.PieChart
 
 
 private const val ARG_PARAM1 = "param1"
@@ -17,6 +20,9 @@ private const val ARG_PARAM2 = "param2"
 
 class TeachingFragment : Fragment() {
     private lateinit var randomWords: MutableList<MutableList<String>>
+    private lateinit var sharedPref : SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     private var param1: String? = null
     private var param2: String? = null
     private var listView: ListView? = null
@@ -51,6 +57,9 @@ class TeachingFragment : Fragment() {
         }
         winText = view.findViewById(R.id.win_text)
         randomWords = words.getRandomWords(requireContext())
+        sharedPref = requireContext().getSharedPreferences("Test", Context.MODE_PRIVATE)
+        editor = sharedPref.edit()
+
     }
 
     companion object {
@@ -117,17 +126,29 @@ class TeachingFragment : Fragment() {
                 val element: String = parent.getItemAtPosition(position) as String
                 if (level == 0) {
                     if (element == currentWord) {
+
+                        updateStatistics(true)
+
                         parent.getChildAt(position).setBackgroundColor(Color.GREEN)
                         randomWords[0].add(randomWords[0].removeFirst())
                     } else {
+
+                        updateStatistics(false)
+
                         parent.getChildAt(position).setBackgroundColor(Color.RED)
                         randomWords[1].add(randomWords[0].removeFirst())
                     }
                 } else {
                     if (element == currentWord) {
+
+                        updateStatistics(true)
+
                         parent.getChildAt(position).setBackgroundColor(Color.GREEN)
                         randomWords[if (level < 4) level + 1 else 0].add(randomWords[level].removeFirst())
                     } else {
+
+                        updateStatistics(false)
+
                         parent.getChildAt(position).setBackgroundColor(Color.RED)
                         randomWords[if (level > 1) level - 1 else 1].add(randomWords[level].removeFirst())
                     }
@@ -144,6 +165,17 @@ class TeachingFragment : Fragment() {
                 createTask()
             }
         }
+    }
+
+    private fun updateStatistics(isAnswerRight:Boolean){
+        editor.putInt("ALL_TESTS", sharedPref.getInt("ALL_TESTS", 0)+1)
+        if(isAnswerRight){
+            editor.putInt("RIGHT_ANSWERS", sharedPref.getInt("RIGHT_ANSWERS", 0)+1)
+        }
+        else{
+            editor.putInt("WRONG_ANSWERS", sharedPref.getInt("WRONG_ANSWERS", 0)+1)
+        }
+        editor.apply()
     }
 
     @SuppressLint("SetTextI18n")

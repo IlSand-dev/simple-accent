@@ -2,12 +2,17 @@ package com.example.orthoepy
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.data.PieData
+import com.github.mikephil.charting.data.PieDataSet
+import com.github.mikephil.charting.data.PieEntry
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -24,6 +29,7 @@ class ProfileFragment : Fragment() {
     private var param1: String? = null
     private var param2: String? = null
     private var name : TextView? = null
+    private lateinit var pieChart: PieChart
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -46,6 +52,18 @@ class ProfileFragment : Fragment() {
         name = view.findViewById(R.id.name)
         val sharedPref : SharedPreferences = requireContext().getSharedPreferences("Test", Context.MODE_PRIVATE)
         name!!.text = sharedPref.getString("USER_NAME", "Jack")
+        pieChart = view.findViewById(R.id.pc)
+        val entry : ArrayList<PieEntry> = ArrayList()
+        entry.add(PieEntry(sharedPref.getInt("RIGHT_ANSWERS", 50).toFloat()))
+        entry.add(PieEntry(sharedPref.getInt("ALL_TESTS", 50).toFloat()))
+        val dataSet = PieDataSet(entry, "Количество правильных ответов")
+        val data = PieData(dataSet)
+        val colors: ArrayList<Int> = ArrayList()
+        colors.add(Color.RED)
+        colors.add(Color.GREEN)
+        dataSet.colors = colors
+        pieChart.legend.isEnabled = false
+        pieChart.data = data
     }
 
     companion object {

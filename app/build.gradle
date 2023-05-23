@@ -9,7 +9,7 @@ android {
     defaultConfig {
         applicationId "com.example.orthoepy"
         minSdk 21
-        targetSdk 32
+        targetSdk 33
         versionCode 1
         versionName "1.0"
 
@@ -63,6 +63,8 @@ dependencies {
 
     // optional - Paging 3 Integration
     implementation "androidx.room:room-paging:$room_version"
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
 
 }
