@@ -16,14 +16,17 @@ private const val ARG_PARAM1 = "param1"
 private const val ARG_PARAM2 = "param2"
 
 class TeachingFragment : Fragment() {
+    private lateinit var randomWords: MutableList<MutableList<String>>
     private var param1: String? = null
     private var param2: String? = null
-    private var listView : ListView? = null
-    private var button : Button? = null
-    private var winText : TextView? = null
-    private val words : Words = Words()
+    private var listView: ListView? = null
+    private var button: Button? = null
+    private var winText: TextView? = null
+    private val words: Words = Words()
     private var mistakeCounter = 0
     private var taskCount = 0
+    private var wordCount = 0
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,8 +37,7 @@ class TeachingFragment : Fragment() {
     }
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         return inflater.inflate(R.layout.fragment_teaching, container, false)
     }
@@ -45,48 +47,103 @@ class TeachingFragment : Fragment() {
         listView = view.findViewById(R.id.answers_list)
         button = view.findViewById(R.id.button_1)
         button!!.setOnClickListener {
-            createList()
+            createTask()
         }
         winText = view.findViewById(R.id.win_text)
+        randomWords = words.getRandomWords(requireContext())
     }
 
     companion object {
         @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            TeachingFragment().apply {
-                arguments = Bundle().apply {
-                    putString(ARG_PARAM1, param1)
-                    putString(ARG_PARAM2, param2)
-                }
+        fun newInstance(param1: String, param2: String) = TeachingFragment().apply {
+            arguments = Bundle().apply {
+                putString(ARG_PARAM1, param1)
+                putString(ARG_PARAM2, param2)
             }
+        }
     }
 
-    private fun makeTask(word:String, vowels:List<String>):List<String>{
+    private fun makeTask(word: String, vowels: List<String>): List<String> {
         val testWord = word.lowercase()
         val listOfVariants = mutableListOf<String>()
         var listIsFull = false
-        for (i in 0 until testWord.length){
+        for (i in testWord.indices) {
             println(testWord[i])
-            if(vowels.contains(testWord[i].toString())){
-                val wordToAdd = testWord.slice(0..i-1) + testWord[i].uppercase() + testWord.slice(i+1..testWord.length-1)
+            if (vowels.contains(testWord[i].toString())) {
+                val wordToAdd =
+                    testWord.slice(0 until i) + testWord[i].uppercase() + testWord.slice(
+                        i + 1 until testWord.length
+                    )
                 println(wordToAdd)
-                if(listOfVariants.size < 4){
+                if (listOfVariants.size < 4) {
                     listOfVariants.add(wordToAdd)
-                }
-                else{
+                } else {
                     listIsFull = true
                 }
             }
-            if(listIsFull){
+            if (listIsFull) {
                 break
             }
         }
         //если правильный вариант не выпал он всегда будет
-        if(!listOfVariants.contains(word)){
-            val randomIndex = (0..listOfVariants.size-1).random()
+        if (!listOfVariants.contains(word)) {
+            val randomIndex = (0 until listOfVariants.size).random()
             listOfVariants[randomIndex] = word
         }
         return listOfVariants
+    }
+
+    private fun checkWordCount(layer: Int): Boolean {
+        val levels = intArrayOf(10, 15, 25, 35)
+        return wordCount % levels[layer - 1] == 0 && randomWords[layer].size > 0
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun createTask() {
+        button!!.text = "Далее"
+        winText!!.text = ""
+        var isPossibleToClickNext = false
+        val vowels = words.getVowels()
+        wordCount = if (randomWords[0].size == 0) 0 else wordCount
+        val level: Int =
+            if (checkWordCount(4)) 4
+            else (if (checkWordCount(3)) 3
+            else (if (checkWordCount(2)) 2
+            else (if (checkWordCount(1)) 1 else 0)))
+        val currentWord = randomWords[level][0]
+        val answerVariants = makeTask(currentWord, vowels)
+        listView!!.setOnItemClickListener { parent, view, position, id ->
+            if (!isPossibleToClickNext) {
+                val element: String = parent.getItemAtPosition(position) as String
+                if (level == 0) {
+                    if (element == currentWord) {
+                        parent.getChildAt(position).setBackgroundColor(Color.GREEN)
+                        randomWords[0].add(randomWords[0].removeFirst())
+                    } else {
+                        parent.getChildAt(position).setBackgroundColor(Color.RED)
+                        randomWords[1].add(randomWords[0].removeFirst())
+                    }
+                } else {
+                    if (element == currentWord) {
+                        parent.getChildAt(position).setBackgroundColor(Color.GREEN)
+                        randomWords[if (level < 4) level + 1 else 0].add(randomWords[level].removeFirst())
+                    } else {
+                        parent.getChildAt(position).setBackgroundColor(Color.RED)
+                        randomWords[if (level > 1) level - 1 else 1].add(randomWords[level].removeFirst())
+                    }
+                }
+                wordCount++
+                isPossibleToClickNext = true
+            }
+        }
+        val adapter = CustomListAdapter(requireContext(), answerVariants)
+        listView!!.adapter = adapter
+
+        button!!.setOnClickListener {
+            if (isPossibleToClickNext) {
+                createTask()
+            }
+        }
     }
 
     @SuppressLint("SetTextI18n")
@@ -97,37 +154,34 @@ class TeachingFragment : Fragment() {
         var isTestOver = false
         val wordsList = words.getWords(requireContext())
         val vowels = words.getVowels()
-        val rightWord = wordsList[(0..wordsList.size-1).random()]
-        val answerVarinats = makeTask(rightWord, vowels)
+        val rightWord = wordsList[(0 until wordsList.size).random()]
+        val answerVariants = makeTask(rightWord, vowels)
         listView!!.setOnItemClickListener { parent, view, position, id ->
-            if(isPossibleToClick && !isTestOver){
-                val element:String= parent.getItemAtPosition(position) as String
+            if (isPossibleToClick && !isTestOver) {
+                val element: String = parent.getItemAtPosition(position) as String
 
-                if(element.equals(rightWord) && isPossibleToClick){
+                if (element.equals(rightWord) && isPossibleToClick) {
                     parent.getChildAt(position).setBackgroundColor(Color.GREEN)
                     taskCount++
-                    if(taskCount < 5){
+                    if (taskCount < 5) {
                         winText!!.text = "Верно!"
                         isPossibleToClick = false
-                    }
-                    else{
-                        winText!!.text =  "Количество ошибок: " + mistakeCounter.toString()
+                    } else {
+                        winText!!.text = "Количество ошибок: $mistakeCounter"
                         taskCount = 0
                         isTestOver = true
                         mistakeCounter = 0
                         button!!.text = "Новый тест"
                     }
-                }
-                else{
+                } else {
                     parent.getChildAt(position).setBackgroundColor(Color.RED)
                     mistakeCounter++
                     taskCount++
-                    if(taskCount < 5){
-                        winText!!.text = "Неверно! Правильный вариант " + rightWord
+                    if (taskCount < 5) {
+                        winText!!.text = "Неверно! Правильный вариант $rightWord"
                         isPossibleToClick = false
-                    }
-                    else{
-                        winText!!.text = "Количество ошибок: " + mistakeCounter.toString()
+                    } else {
+                        winText!!.text = "Количество ошибок: $mistakeCounter"
                         taskCount = 0
                         isTestOver = true
                         mistakeCounter = 0
@@ -137,7 +191,7 @@ class TeachingFragment : Fragment() {
             }
 
         }
-        val adapter = CustomListAdapter(requireContext(), answerVarinats)
+        val adapter = CustomListAdapter(requireContext(), answerVariants)
         listView!!.adapter = adapter
     }
 }
