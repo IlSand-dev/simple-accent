@@ -51,7 +51,7 @@ class RegisterFragment : Fragment() {
             nameText!!.setError("Поле не должно быть пустым")
             return
         }
-        if(name.length > 9){
+        if(name.length > 12){
             nameText!!.setError("Слишком длинное имя")
             return
         }

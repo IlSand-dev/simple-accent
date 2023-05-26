@@ -56,10 +56,8 @@ class Words {
         editor = sharedPref.edit()
         editor.putString("SAVED_STATE", jsonObject.toString())
         editor.apply()
-        //println(jsonObject)
     }
 
-    //    TODO Change name of function
     fun newGetRandomWords(context: Context): MutableList<Pair<String, Int>> {
         val words = mutableListOf<Pair<String, Int>>()
 
@@ -71,8 +69,6 @@ class Words {
                 words.add(Pair(word, jsonObject.getInt(word)))
 
             }
-            //println(words)
-            //words = jsonObject.g
         }
         else{
             getWords(context).shuffled().forEach { word -> words.add(Pair(word, 0)) }

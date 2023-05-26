@@ -27,7 +27,6 @@ class TeachingFragment : Fragment() {
     private var param2: String? = null
     private var listView: ListView? = null
     private var button: Button? = null
-    private var winText: TextView? = null
     private val words: Words = Words()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,7 +50,6 @@ class TeachingFragment : Fragment() {
         button!!.setOnClickListener {
             newCreateTask()
         }
-        winText = view.findViewById(R.id.win_text)
         oldRandomWords = words.getRandomWords(requireContext())
         randomWords = words.newGetRandomWords(requireContext())
         sharedPref = requireContext().getSharedPreferences("Test", Context.MODE_PRIVATE)
