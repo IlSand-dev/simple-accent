@@ -51,6 +51,10 @@ class RegisterFragment : Fragment() {
             nameText!!.setError("Поле не должно быть пустым")
             return
         }
+        if(name.length > 9){
+            nameText!!.setError("Слишком длинное имя")
+            return
+        }
         val sharedPref : SharedPreferences = requireContext().getSharedPreferences("Test", Context.MODE_PRIVATE)
         val editor : SharedPreferences.Editor = sharedPref.edit()
         editor.putBoolean("NEW_USER", true)

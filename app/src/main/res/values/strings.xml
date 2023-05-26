@@ -7,6 +7,7 @@
     <string name="hint">Введите имя</string>
     <string name="cont">Продолжить</string>
     <string name="teach_materials">Обучающие материалы</string>
+    <string name="profile">Профиль</string>
     <string name="new_test">Пройти тестирование</string>
     <string-array name="words_types">
         <item>Все слова</item>

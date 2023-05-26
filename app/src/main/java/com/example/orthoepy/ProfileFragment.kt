@@ -3,16 +3,21 @@ package com.example.orthoepy
 import android.content.Context
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.Typeface
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.charts.PieChart
+import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.data.PieData
 import com.github.mikephil.charting.data.PieDataSet
 import com.github.mikephil.charting.data.PieEntry
+import com.github.mikephil.charting.utils.MPPointF
+
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -53,16 +58,37 @@ class ProfileFragment : Fragment() {
         val sharedPref : SharedPreferences = requireContext().getSharedPreferences("Test", Context.MODE_PRIVATE)
         name!!.text = sharedPref.getString("USER_NAME", "Jack")
         pieChart = view.findViewById(R.id.pc)
+        pieChart.description.isEnabled = false
+
         val entry : ArrayList<PieEntry> = ArrayList()
-        entry.add(PieEntry(sharedPref.getInt("RIGHT_ANSWERS", 50).toFloat()))
-        entry.add(PieEntry(sharedPref.getInt("ALL_TESTS", 50).toFloat()))
-        val dataSet = PieDataSet(entry, "Количество правильных ответов")
+        entry.add(PieEntry(sharedPref.getInt("WRONG_ANSWERS", 0).toFloat() , "Неправильные ответы"))
+        entry.add(PieEntry(sharedPref.getInt("RIGHT_ANSWERS", 0).toFloat(), "Правильные ответы"))
+
+        val dataSet = PieDataSet(entry, "")
         val data = PieData(dataSet)
+
         val colors: ArrayList<Int> = ArrayList()
-        colors.add(Color.RED)
-        colors.add(Color.GREEN)
+        colors.add(Color.parseColor("#FF6961"))
+        colors.add(Color.parseColor("#77DD77"))
+
+        pieChart.setDrawSliceText(false)
+        data.setValueTextSize(21f)
+        data.setValueTypeface(Typeface.DEFAULT_BOLD)
+        dataSet.iconsOffset = MPPointF(0F, 40F)
         dataSet.colors = colors
-        pieChart.legend.isEnabled = false
+        dataSet.sliceSpace = 10f
+
+        pieChart.legend.isEnabled = true
+        val legend : Legend = pieChart.legend
+        legend.verticalAlignment = Legend.LegendVerticalAlignment.TOP
+        legend.horizontalAlignment = Legend.LegendHorizontalAlignment.CENTER
+        legend.orientation = Legend.LegendOrientation.VERTICAL
+        legend.setDrawInside(false)
+        legend.xEntrySpace = 0f
+        legend.yEntrySpace = 0f
+
+        pieChart.legend.textSize = 21f
+        pieChart.animateY(950, Easing.EaseInOutQuad)
         pieChart.data = data
     }
 
