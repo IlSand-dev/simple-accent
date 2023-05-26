@@ -1,12 +1,19 @@
 package com.example.orthoepy
 
 import android.content.Context
+import android.content.SharedPreferences
+import org.json.JSONArray
+import org.json.JSONObject
 import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 
 
 class Words {
+
+    private lateinit var sharedPref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+
     private val vowels = listOf(
         "а",
         "о",
@@ -40,6 +47,37 @@ class Words {
 
         }
         return newWords
+    }
+
+    fun saveState(words: MutableList<Pair<String, Int>>, context: Context) {
+        val jsonObject = JSONObject()
+        words.forEach { pair -> jsonObject.put(pair.first, pair.second) }
+        sharedPref = context.getSharedPreferences("Test", Context.MODE_PRIVATE)
+        editor = sharedPref.edit()
+        editor.putString("SAVED_STATE", jsonObject.toString())
+        editor.apply()
+        //println(jsonObject)
+    }
+
+    //    TODO Change name of function
+    fun newGetRandomWords(context: Context): MutableList<Pair<String, Int>> {
+        val words = mutableListOf<Pair<String, Int>>()
+
+        val getStateString =
+            context.getSharedPreferences("Test", Context.MODE_PRIVATE).getString("SAVED_STATE", "")
+        if (getStateString != "") {
+            val jsonObject = JSONObject(getStateString)
+            jsonObject.keys().forEach { word ->
+                words.add(Pair(word, jsonObject.getInt(word)))
+
+            }
+            //println(words)
+            //words = jsonObject.g
+        }
+        else{
+            getWords(context).shuffled().forEach { word -> words.add(Pair(word, 0)) }
+        }
+        return words
     }
 
     fun getRandomWords(context: Context): MutableList<MutableList<String>> {
